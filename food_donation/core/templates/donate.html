@@ -1,0 +1,15 @@
+<input type="hidden" id="lat" name="latitude">
+<input type="hidden" id="lng" name="longitude">
+<script>
+
+navigator.geolocation.getCurrentPosition(function(position){
+
+    document.getElementById("lat").value =
+        position.coords.latitude;
+
+    document.getElementById("lng").value =
+        position.coords.longitude;
+
+});
+
+</script>

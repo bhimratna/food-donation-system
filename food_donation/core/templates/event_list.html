@@ -1,0 +1,1136 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Available Donations | FoodBridge</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+/* =========================
+   GLOBAL
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:'Poppins',sans-serif;
+
+    background:
+    linear-gradient(rgba(0,0,0,0.72),rgba(0,0,0,0.82)),
+    url('https://images.unsplash.com/photo-1488459716781-31db52582fe9');
+
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+
+    min-height:100vh;
+
+    color:white;
+}
+
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar{
+
+    background:rgba(255,255,255,0.06);
+
+    backdrop-filter:blur(20px);
+
+    border-bottom:1px solid rgba(255,255,255,0.08);
+
+    padding:18px 0;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:999;
+}
+
+.logo{
+
+    font-size:30px;
+
+    font-weight:800;
+
+    color:#22c55e;
+
+    text-decoration:none;
+}
+
+.nav-buttons{
+
+    display:flex;
+
+    gap:14px;
+}
+
+.nav-btn{
+
+    text-decoration:none;
+
+    color:white;
+
+    padding:10px 22px;
+
+    border-radius:14px;
+
+    transition:0.3s;
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    background:rgba(255,255,255,0.05);
+}
+
+.nav-btn:hover{
+
+    background:#22c55e;
+
+    color:white;
+}
+
+
+/* =========================
+   HERO SECTION
+========================= */
+
+.hero{
+
+    text-align:center;
+
+    padding:80px 20px 50px;
+}
+
+.hero-badge{
+
+    display:inline-block;
+
+    padding:10px 24px;
+
+    background:rgba(34,197,94,0.15);
+
+    border:1px solid rgba(34,197,94,0.2);
+
+    color:#86efac;
+
+    border-radius:50px;
+
+    margin-bottom:24px;
+
+    font-weight:600;
+}
+
+.hero-title{
+
+    font-size:64px;
+
+    font-weight:800;
+
+    margin-bottom:20px;
+}
+
+.hero-title span{
+
+    color:#22c55e;
+}
+
+.hero-subtitle{
+
+    max-width:760px;
+
+    margin:auto;
+
+    color:#d1d5db;
+
+    font-size:18px;
+
+    line-height:1.8;
+}
+
+
+/* =========================
+   SEARCH BAR
+========================= */
+
+.search-wrapper{
+
+    margin-top:40px;
+
+    display:flex;
+
+    justify-content:center;
+}
+
+.search-box{
+
+    width:100%;
+
+    max-width:850px;
+
+    position:relative;
+}
+
+.search-input{
+
+    width:100%;
+
+    background:rgba(255,255,255,0.08);
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    color:white;
+
+    border-radius:20px;
+
+    padding:20px 25px 20px 60px;
+
+    font-size:16px;
+
+    outline:none;
+
+    backdrop-filter:blur(12px);
+}
+
+.search-input:focus{
+
+    border-color:#22c55e;
+
+    box-shadow:0 0 0 4px rgba(34,197,94,0.2);
+}
+
+.search-input::placeholder{
+
+    color:#cbd5e1;
+}
+
+.search-icon{
+
+    position:absolute;
+
+    left:22px;
+
+    top:18px;
+
+    font-size:22px;
+}
+
+
+/* =========================
+   FOOD CARDS
+========================= */
+
+.food-section{
+
+    padding:30px 0 80px;
+}
+
+.food-card{
+
+    background:rgba(255,255,255,0.08);
+
+    border-radius:30px;
+
+    overflow:hidden;
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(18px);
+
+    transition:0.4s;
+
+    height:100%;
+
+    box-shadow:0 18px 45px rgba(0,0,0,0.35);
+}
+
+.food-card:hover{
+
+    transform:translateY(-10px);
+
+    box-shadow:0 30px 70px rgba(34,197,94,0.28);
+}
+
+
+/* IMAGE */
+
+.food-img{
+
+    width:100%;
+
+    height:240px;
+
+    object-fit:cover;
+}
+
+
+/* CONTENT */
+
+.food-content{
+
+    padding:24px;
+}
+
+.top-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:15px;
+}
+
+.event-name{
+
+    font-size:24px;
+
+    font-weight:700;
+
+    color:white;
+}
+
+.location{
+
+    color:#d1d5db;
+
+    margin-bottom:18px;
+
+    font-size:15px;
+}
+
+.food-items{
+
+    display:inline-block;
+
+    background:rgba(34,197,94,0.15);
+
+    color:#86efac;
+
+    padding:10px 16px;
+
+    border-radius:14px;
+
+    font-weight:600;
+
+    margin-bottom:22px;
+}
+
+
+/* INFO GRID */
+
+.info-grid{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:14px;
+
+    margin-bottom:24px;
+}
+
+.info-box{
+
+    background:rgba(255,255,255,0.05);
+
+    padding:16px;
+
+    border-radius:16px;
+
+    text-align:center;
+}
+
+.info-box small{
+
+    color:#9ca3af;
+}
+
+.info-box h5{
+
+    color:white;
+
+    font-size:20px;
+
+    margin-top:8px;
+
+    font-weight:700;
+}
+
+
+/* PRIORITY BADGES */
+
+.priority{
+
+    padding:8px 14px;
+
+    border-radius:50px;
+
+    font-size:13px;
+
+    font-weight:700;
+}
+
+.high{
+
+    background:rgba(239,68,68,0.2);
+
+    color:#f87171;
+}
+
+.medium{
+
+    background:rgba(234,179,8,0.2);
+
+    color:#facc15;
+}
+
+.low{
+
+    background:rgba(34,197,94,0.2);
+
+    color:#4ade80;
+}
+
+
+/* BUTTON */
+
+.accept-btn{
+
+    display:block;
+
+    width:100%;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+
+    color:white;
+
+    padding:16px;
+
+    border-radius:18px;
+
+    font-weight:700;
+
+    transition:0.3s;
+}
+
+.accept-btn:hover{
+
+    transform:scale(1.02);
+
+    color:white;
+
+    box-shadow:0 12px 30px rgba(34,197,94,0.35);
+}
+
+
+/* EMPTY */
+
+.empty-state{
+
+    text-align:center;
+
+    padding:100px 20px;
+}
+
+.empty-state h2{
+
+    font-size:42px;
+
+    margin-bottom:18px;
+}
+
+.empty-state p{
+
+    color:#d1d5db;
+}
+
+
+/* =========================
+   CHATBOT BUTTON
+========================= */
+
+.chatbot-btn{
+
+    position:fixed;
+
+    bottom:25px;
+
+    right:25px;
+
+    width:70px;
+
+    height:70px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+
+    color:white;
+
+    font-size:30px;
+
+    cursor:pointer;
+
+    box-shadow:0 15px 40px rgba(34,197,94,0.45);
+
+    z-index:9999;
+
+    transition:0.3s;
+}
+
+.chatbot-btn:hover{
+
+    transform:scale(1.08);
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+    .hero-title{
+
+        font-size:42px;
+    }
+
+    .top-row{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:12px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar">
+
+<div class="container d-flex justify-content-between align-items-center">
+
+<a href="/dashboard/" class="logo">
+🌿 FoodBridge
+</a>
+
+<div class="nav-buttons">
+
+<a href="/dashboard/" class="nav-btn">
+Dashboard
+</a>
+
+<a href="/add-event/" class="nav-btn">
+Donate
+</a>
+
+<a href="/accepted/" class="nav-btn">
+Accepted
+</a>
+
+<a href="/logout/" class="nav-btn">
+Logout
+</a>
+
+</div>
+
+</div>
+
+</nav>
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero">
+
+<div class="container">
+
+<div class="hero-badge">
+🍱 Smart Food Donation Platform
+</div>
+
+<h1 class="hero-title">
+Available <span>Donations</span>
+</h1>
+
+<p class="hero-subtitle">
+
+Connect surplus food from events, restaurants and communities
+with NGOs and families in need in real-time.
+
+</p>
+
+
+<!-- SEARCH -->
+
+<div class="search-wrapper">
+
+<div class="search-box">
+
+<span class="search-icon">
+🔍
+</span>
+
+<input type="text"
+class="search-input"
+placeholder="Search by location, food item or event...">
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     FOOD SECTION
+========================= -->
+
+<section class="food-section">
+
+<div class="container">
+
+{% if events %}
+
+<div class="row g-4">
+
+{% for event in events %}
+
+<div class="col-lg-4 col-md-6">
+
+<div class="food-card">
+
+    <!-- IMAGE -->
+
+    {% if event.image %}
+
+        <img src="{{ event.image.url }}"
+             class="food-img"
+             onerror="this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836'">
+
+    {% else %}
+
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836"
+             class="food-img">
+
+    {% endif %}
+
+
+    <!-- CONTENT -->
+
+    <div class="food-content">
+
+        <div class="top-row">
+
+            <h3 class="event-name">
+                {{ event.event_name }}
+            </h3>
+
+            {% if event.quantity > 200 %}
+
+                <span class="priority high">
+                    🔥 High
+                </span>
+
+            {% elif event.quantity > 100 %}
+
+                <span class="priority medium">
+                    ⚡ Medium
+                </span>
+
+            {% else %}
+
+                <span class="priority low">
+                    🟢 Low
+                </span>
+
+            {% endif %}
+
+        </div>
+
+        <!-- LOCATION -->
+
+        <p class="location">
+            📍 {{ event.location }}
+        </p>
+
+        <!-- FOOD ITEMS -->
+
+        <div class="food-items">
+            🍲 {{ event.food_items }}
+        </div>
+
+        <!-- INFO -->
+
+        <div class="info-grid">
+
+            <div class="info-box">
+
+                <small>Quantity</small>
+
+                <h5>{{ event.quantity }}</h5>
+
+            </div>
+
+            <div class="info-box">
+
+                <small>Expiry</small>
+
+                <h5>{{ event.expiry_time }}</h5>
+
+            </div>
+
+        </div>
+
+        <!-- BUTTON -->
+
+        <a href="/accept/{{ event.id }}/"
+           class="accept-btn">
+
+            Accept Donation
+
+        </a>
+
+    </div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% else %}
+
+<div class="empty-state">
+
+<h2>
+No Donations Available
+</h2>
+
+<p>
+Food donations will appear here once uploaded.
+</p>
+
+</div>
+
+{% endif %}
+
+</div>
+
+</section>
+
+
+
+<!-- =========================
+     PROFESSIONAL AI CHATBOT
+========================= -->
+
+<style>
+/* Floating Button */
+.ai-toggle{
+    position:fixed;
+    bottom:25px;
+    right:25px;
+    width:65px;
+    height:65px;
+    border-radius:50%;
+    border:none;
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+    box-shadow:0 10px 30px rgba(34,197,94,0.4);
+    z-index:9999;
+    transition:0.3s;
+}
+
+.ai-toggle:hover{
+    transform:scale(1.08);
+}
+
+/* Chat Container */
+.ai-chatbox{
+    position:fixed;
+    bottom:100px;
+    right:25px;
+    width:370px;
+    height:580px;
+    background:rgba(15,23,42,0.95);
+    backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:28px;
+    overflow:hidden;
+    display:none;
+    flex-direction:column;
+    z-index:9999;
+    box-shadow:0 20px 60px rgba(0,0,0,0.45);
+    animation:chatOpen 0.35s ease;
+}
+
+@keyframes chatOpen{
+    from{
+        opacity:0;
+        transform:translateY(20px) scale(0.95);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+}
+
+/* Header */
+.ai-header{
+    padding:18px 20px;
+    background:linear-gradient(135deg,#22c55e,#15803d);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.ai-header-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.ai-avatar{
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.2);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+}
+
+.ai-title{
+    font-size:18px;
+    font-weight:700;
+    margin:0;
+}
+
+.ai-status{
+    font-size:12px;
+    opacity:0.9;
+}
+
+.ai-close{
+    background:none;
+    border:none;
+    color:white;
+    font-size:24px;
+    cursor:pointer;
+}
+
+/* Chat Body */
+.ai-body{
+    flex:1;
+    padding:20px;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    background:#0f172a;
+}
+
+/* Messages */
+.message{
+    max-width:82%;
+    padding:14px 16px;
+    border-radius:18px;
+    font-size:14px;
+    line-height:1.6;
+    animation:fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.user-message{
+    align-self:flex-end;
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+    color:white;
+    border-bottom-right-radius:6px;
+}
+
+.bot-message{
+    align-self:flex-start;
+    background:#1e293b;
+    color:#e2e8f0;
+    border-bottom-left-radius:6px;
+}
+
+/* Input Area */
+.ai-footer{
+    padding:18px;
+    background:#111827;
+    border-top:1px solid rgba(255,255,255,0.06);
+}
+
+.ai-input-box{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.ai-input{
+    flex:1;
+    border:none;
+    outline:none;
+    background:#1e293b;
+    color:white;
+    padding:14px 16px;
+    border-radius:14px;
+    font-size:14px;
+}
+
+.ai-input::placeholder{
+    color:#94a3b8;
+}
+
+.ai-send{
+    width:50px;
+    height:50px;
+    border:none;
+    border-radius:14px;
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+    color:white;
+    font-size:20px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.ai-send:hover{
+    transform:scale(1.05);
+}
+
+/* Scrollbar */
+.ai-body::-webkit-scrollbar{
+    width:5px;
+}
+
+.ai-body::-webkit-scrollbar-thumb{
+    background:#334155;
+    border-radius:10px;
+}
+
+/* Mobile */
+@media(max-width:500px){
+
+    .ai-chatbox{
+        width:95%;
+        right:2.5%;
+        bottom:90px;
+        height:80vh;
+    }
+
+}
+</style>
+
+<!-- Floating Button -->
+<button class="ai-toggle" onclick="toggleChat()">
+💬
+</button>
+
+<!-- Chatbot -->
+<div class="ai-chatbox" id="aiChatbox">
+
+    <!-- Header -->
+    <div class="ai-header">
+
+        <div class="ai-header-left">
+            <div class="ai-avatar">🤖</div>
+
+            <div>
+                <h4 class="ai-title">Food AI Assistant</h4>
+                <div class="ai-status">Online • Smart Support</div>
+            </div>
+        </div>
+
+        <button class="ai-close" onclick="toggleChat()">×</button>
+
+    </div>
+
+    <!-- Messages -->
+    <div class="ai-body" id="chatBody">
+
+        <div class="message bot-message">
+            👋 Hello! I'm your AI assistant.<br><br>
+            Ask me about:
+            <br>• Food donation
+            <br>• NGOs
+            <br>• Events
+            <br>• Hunger support
+            <br>• Your platform
+        </div>
+
+    </div>
+
+    <!-- Input -->
+    <div class="ai-footer">
+
+        <div class="ai-input-box">
+
+            <input
+                type="text"
+                id="userInput"
+                class="ai-input"
+                placeholder="Type your message..."
+                onkeypress="handleKey(event)"
+            >
+
+            <button class="ai-send" onclick="sendMessage()">
+                ➤
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+/* Open Close Chat */
+function toggleChat(){
+
+    let box = document.getElementById("aiChatbox");
+
+    if(box.style.display === "flex"){
+        box.style.display = "none";
+    }
+    else{
+        box.style.display = "flex";
+    }
+}
+
+/* Enter Key */
+function handleKey(event){
+    if(event.key === "Enter"){
+        sendMessage();
+    }
+}
+
+/* Send Message */
+async function sendMessage(){
+
+    let input = document.getElementById("userInput");
+    let message = input.value.trim();
+
+    if(message === "") return;
+
+    let chatBody = document.getElementById("chatBody");
+
+    /* User Message */
+    chatBody.innerHTML += `
+        <div class="message user-message">
+            ${message}
+        </div>
+    `;
+
+    input.value = "";
+
+    /* Auto Scroll */
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+    /* Typing */
+    let typingId = "typing-" + Date.now();
+
+    chatBody.innerHTML += `
+        <div class="message bot-message" id="${typingId}">
+            ⏳ Thinking...
+        </div>
+    `;
+
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+    try{
+
+        const response = await fetch("/ai-chat/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: message
+            })
+        });
+
+        const data = await response.json();
+
+        document.getElementById(typingId).remove();
+
+        chatBody.innerHTML += `
+            <div class="message bot-message">
+                ${data.response}
+            </div>
+        `;
+
+        chatBody.scrollTop = chatBody.scrollHeight;
+
+    }
+    catch(error){
+
+        document.getElementById(typingId).remove();
+
+        chatBody.innerHTML += `
+            <div class="message bot-message">
+                ❌ Error connecting AI server.
+            </div>
+        `;
+    }
+}
+</script>
+</body>
+</html>

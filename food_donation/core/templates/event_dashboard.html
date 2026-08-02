@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Event Manager Dashboard | FoodBridge</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+
+    background:
+    linear-gradient(rgba(0,0,0,0.78),
+    rgba(0,0,0,0.82)),
+    url('https://images.unsplash.com/photo-1504674900247-0877df9cc836');
+
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+
+    min-height:100vh;
+    color:white;
+}
+
+/* =========================
+NAVBAR
+========================= */
+
+.navbar-custom{
+
+    width:100%;
+    padding:20px 70px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    backdrop-filter:blur(20px);
+
+    background:rgba(0,0,0,0.35);
+
+    border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.logo{
+
+    font-size:34px;
+    font-weight:800;
+}
+
+.logo span{
+    color:#39ff14;
+}
+
+.nav-links{
+
+    display:flex;
+    gap:18px;
+}
+
+.nav-links a{
+
+    text-decoration:none;
+    color:white;
+
+    padding:12px 22px;
+
+    border-radius:14px;
+
+    transition:0.3s;
+
+    background:rgba(255,255,255,0.06);
+}
+
+.nav-links a:hover{
+
+    background:#22c55e;
+    transform:translateY(-2px);
+}
+
+/* =========================
+MAIN
+========================= */
+
+.main-container{
+
+    max-width:1400px;
+    margin:auto;
+
+    padding:60px;
+}
+
+/* =========================
+WELCOME SECTION
+========================= */
+
+.hero-section{
+
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:40px;
+
+    align-items:center;
+
+    margin-bottom:40px;
+}
+
+.hero-left{
+
+    background:rgba(255,255,255,0.08);
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(18px);
+
+    border-radius:35px;
+
+    padding:60px;
+}
+
+.tag{
+
+    display:inline-block;
+
+    background:rgba(57,255,20,0.12);
+
+    color:#7dff69;
+
+    padding:10px 24px;
+
+    border-radius:50px;
+
+    margin-bottom:25px;
+
+    font-size:14px;
+    font-weight:600;
+}
+
+.hero-title{
+
+    font-size:72px;
+    line-height:1.1;
+    font-weight:800;
+}
+
+.green{
+    color:#39ff14;
+}
+
+.hero-text{
+
+    margin-top:25px;
+
+    color:#d1d5db;
+
+    font-size:20px;
+    line-height:1.8;
+}
+
+.hero-buttons{
+
+    margin-top:40px;
+
+    display:flex;
+    gap:20px;
+}
+
+.hero-btn{
+
+    text-decoration:none;
+
+    padding:18px 35px;
+
+    border-radius:18px;
+
+    font-weight:700;
+
+    transition:0.3s;
+}
+
+.btn-green{
+
+    background:#22c55e;
+    color:white;
+}
+
+.btn-dark{
+
+    background:rgba(255,255,255,0.08);
+    color:white;
+}
+
+.hero-btn:hover{
+
+    transform:translateY(-3px) scale(1.03);
+}
+
+/* =========================
+RIGHT PANEL
+========================= */
+
+.hero-right{
+
+    display:grid;
+    gap:25px;
+}
+
+.info-card{
+
+    background:rgba(255,255,255,0.08);
+
+    border-radius:28px;
+
+    padding:35px;
+
+    backdrop-filter:blur(15px);
+
+    border:1px solid rgba(255,255,255,0.06);
+
+    transition:0.3s;
+}
+
+.info-card:hover{
+
+    transform:translateY(-5px);
+}
+
+.info-card h2{
+
+    font-size:52px;
+    font-weight:800;
+    color:#39ff14;
+}
+
+.info-card p{
+
+    margin-top:12px;
+
+    color:#d1d5db;
+}
+
+/* =========================
+ACTION SECTION
+========================= */
+
+.section-box{
+
+    margin-top:30px;
+
+    background:rgba(255,255,255,0.08);
+
+    border-radius:35px;
+
+    padding:45px;
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+.section-title{
+
+    font-size:40px;
+    font-weight:800;
+
+    margin-bottom:35px;
+}
+
+.action-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+
+    gap:25px;
+}
+
+.action-card{
+
+    background:rgba(255,255,255,0.06);
+
+    border-radius:30px;
+
+    padding:35px;
+
+    transition:0.3s;
+
+    border:1px solid rgba(255,255,255,0.06);
+}
+
+.action-card:hover{
+
+    transform:translateY(-6px);
+
+    background:rgba(34,197,94,0.12);
+}
+
+.action-icon{
+
+    font-size:55px;
+
+    margin-bottom:18px;
+}
+
+.action-title{
+
+    font-size:28px;
+    font-weight:700;
+
+    margin-bottom:15px;
+}
+
+.action-text{
+
+    color:#d1d5db;
+
+    line-height:1.7;
+}
+
+.action-btn{
+
+    display:inline-block;
+
+    margin-top:22px;
+
+    text-decoration:none;
+
+    padding:14px 28px;
+
+    border-radius:14px;
+
+    background:#22c55e;
+
+    color:white;
+
+    font-weight:700;
+
+    transition:0.3s;
+}
+
+.action-btn:hover{
+
+    transform:scale(1.05);
+
+    background:#16a34a;
+}
+
+/* =========================
+RESPONSIVE
+========================= */
+
+@media(max-width:1000px){
+
+    .hero-section{
+
+        grid-template-columns:1fr;
+    }
+
+    .hero-title{
+
+        font-size:50px;
+    }
+
+    .navbar-custom{
+
+        padding:20px;
+        flex-direction:column;
+        gap:20px;
+    }
+
+    .main-container{
+
+        padding:20px;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- =========================
+NAVBAR
+========================= -->
+
+<div class="navbar-custom">
+
+    <div class="logo">
+        Food<span>Bridge</span>
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/dashboard/">🏠 Dashboard</a>
+
+        <a href="/add-event/">🍲 Donate</a>
+
+        <a href="/accepted/">📦 Donations</a>
+
+        <a href="/logout/">🚪 Logout</a>
+
+    </div>
+
+</div>
+
+<!-- =========================
+MAIN
+========================= -->
+
+<div class="main-container">
+
+    <!-- HERO -->
+
+    <div class="hero-section">
+
+        <div class="hero-left">
+
+            <div class="tag">
+                🌍 SMART FOOD DONATION SYSTEM
+            </div>
+
+            <h1 class="hero-title">
+                Share Food. <br>
+                <span class="green">
+                    Save Lives.
+                </span>
+            </h1>
+
+            <p class="hero-text">
+
+                Manage food donations efficiently with smart NGO matching,
+                live location tracking, and real-time distribution system.
+
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="/add-event/"
+                   class="hero-btn btn-green">
+
+                    🚀 Donate Food
+
+                </a>
+
+                <a href="/accepted/"
+                   class="hero-btn btn-dark">
+
+                    📦 View Donations
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="hero-right">
+
+            <div class="info-card">
+
+                <h2>24+</h2>
+
+                <p>
+                    Successful Donations
+                </p>
+
+            </div>
+
+            <div class="info-card">
+
+                <h2>12 NGOs</h2>
+
+                <p>
+                    Connected NGOs
+                </p>
+
+            </div>
+
+            <div class="info-card">
+
+                <h2>Live</h2>
+
+                <p>
+                    Smart AI-based NGO Assignment
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ACTIONS -->
+
+    <div class="section-box">
+
+        <h2 class="section-title">
+            ⚡ Quick Actions
+        </h2>
+
+        <div class="action-grid">
+
+            <div class="action-card">
+
+                <div class="action-icon">
+                    🍲
+                </div>
+
+                <div class="action-title">
+                    Add Donation
+                </div>
+
+                <div class="action-text">
+
+                    Upload leftover food details with location and images.
+
+                </div>
+
+                <a href="/add-event/"
+                   class="action-btn">
+
+                    Donate Now
+
+                </a>
+
+            </div>
+
+            <div class="action-card">
+
+                <div class="action-icon">
+                    📦
+                </div>
+
+                <div class="action-title">
+                    Track Donations
+                </div>
+
+                <div class="action-text">
+
+                    Monitor accepted and completed food donations live.
+
+                </div>
+
+                <a href="/accepted/"
+                   class="action-btn">
+
+                    View Status
+
+                </a>
+
+            </div>
+
+            <div class="action-card">
+
+                <div class="action-icon">
+                    🗺
+                </div>
+
+                <div class="action-title">
+                    Live Map
+                </div>
+
+                <div class="action-text">
+
+                    View donation locations and nearby NGOs on map.
+
+                </div>
+
+                <a href="/map/"
+                   class="action-btn">
+
+                    Open Map
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Food Donation Map</title>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <!-- LEAFLET CSS -->
+
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+    <style>
+
+        body{
+            margin:0;
+            padding:0;
+        }
+
+        #map{
+            height:100vh;
+            width:100%;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div id="map"></div>
+
+<!-- LEAFLET JS -->
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+    // DEFAULT MAP
+
+    var map = L.map('map').setView([21.1458, 79.0882], 12);
+
+    // OPENSTREETMAP
+
+    L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
+            attribution: '© OpenStreetMap contributors'
+        }
+    ).addTo(map);
+
+    // DONATION MARKERS
+
+    {% for event in events %}
+
+        {% if event.latitude and event.longitude %}
+
+            L.marker([
+                {{ event.latitude }},
+                {{ event.longitude }}
+            ])
+            .addTo(map)
+            .bindPopup(
+                `
+                <b>{{ event.event_name }}</b><br>
+                🍲 {{ event.food_items }}<br>
+                📍 {{ event.location }}<br>
+                🔢 Quantity: {{ event.quantity }}
+                `
+            );
+
+        {% endif %}
+
+    {% endfor %}
+
+</script>
+
+</body>
+</html>

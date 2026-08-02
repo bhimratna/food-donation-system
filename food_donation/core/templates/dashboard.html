@@ -1,0 +1,1318 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FoodBridge — Dashboard</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <style>
+    /* ═══════════════════════════════════════
+       DESIGN TOKENS
+    ═══════════════════════════════════════ */
+    :root {
+      --sage:        #3d7a4f;
+      --sage-light:  #52a86a;
+      --sage-pale:   #e8f5ec;
+      --leaf:        #2c5f3a;
+      --gold:        #f0b429;
+      --gold-light:  #fde68a;
+      --cream:       #fdfaf5;
+      --ink:         #1a2e1e;
+      --ink-mid:     #3a4f3e;
+      --muted:       #7a9282;
+      --glass-bg:    rgba(255,255,255,0.12);
+      --glass-border:rgba(255,255,255,0.22);
+      --shadow-sm:   0 2px 12px rgba(30,60,40,0.08);
+      --shadow-md:   0 8px 32px rgba(30,60,40,0.13);
+      --shadow-lg:   0 20px 60px rgba(30,60,40,0.18);
+      --radius-sm:   10px;
+      --radius-md:   18px;
+      --radius-lg:   28px;
+      --radius-xl:   40px;
+      --transition:  0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      --transition-smooth: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* -----------------------------------
+       BASE
+    ---------------------------------- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4, h5 {
+      font-family: 'Clash Display', sans-serif;
+      letter-spacing: -0.02em;
+    }
+
+    /* ------------------------------------------
+       PAGE-LOAD ANIMATIONS
+    ------------------------------------- */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      33%       { transform: translateY(-14px) rotate(2deg); }
+      66%       { transform: translateY(-6px) rotate(-1deg); }
+    }
+    @keyframes pulse-ring {
+      0%   { transform: scale(1);   opacity: 0.6; }
+      100% { transform: scale(1.9); opacity: 0; }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position:  200% center; }
+    }
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(-3deg); }
+      50%       { transform: rotate(3deg); }
+    }
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .animate-in { animation: fadeUp 0.7s var(--transition-smooth) both; }
+    .animate-in-delay-1 { animation-delay: 0.10s; }
+    .animate-in-delay-2 { animation-delay: 0.20s; }
+    .animate-in-delay-3 { animation-delay: 0.30s; }
+    .animate-in-delay-4 { animation-delay: 0.45s; }
+    .animate-in-delay-5 { animation-delay: 0.60s; }
+
+    /* -----------------------------------------
+       GLASSMORPHISM NAVBAR
+    --------------------------------------- */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 14px 0;
+      background: rgba(22, 50, 30, 0.68);
+      backdrop-filter: blur(22px) saturate(1.9);
+      -webkit-backdrop-filter: blur(22px) saturate(1.9);
+      border-bottom: 1px solid rgba(255,255,255,0.09);
+      animation: slideDown 0.65s var(--transition-smooth) both;
+      transition: background 0.4s ease, padding 0.3s ease, box-shadow 0.3s ease;
+    }
+    .navbar.scrolled {
+      background: rgba(15, 35, 20, 0.94);
+      padding: 10px 0;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.25);
+    }
+
+    .navbar-brand {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Clash Display', sans-serif;
+      font-size: 1.35rem; font-weight: 700;
+      color: #fff !important; text-decoration: none;
+    }
+    .brand-icon {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--gold), #f97316);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 14px rgba(240,180,41,0.45);
+      transition: transform var(--transition);
+    }
+    .navbar-brand:hover .brand-icon { transform: rotate(12deg) scale(1.1); }
+    .brand-name span { color: var(--gold); }
+
+    .nav-link {
+      color: rgba(255,255,255,0.78) !important;
+      font-size: 0.88rem; font-weight: 500;
+      padding: 8px 15px !important;
+      border-radius: 50px;
+      display: flex; align-items: center; gap: 6px;
+      position: relative;
+      transition: all 0.25s ease;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute; bottom: 2px; left: 50%; right: 50%;
+      height: 2px; background: var(--gold); border-radius: 2px;
+      transition: left 0.3s ease, right 0.3s ease;
+    }
+    .nav-link:hover        { color: #fff !important; background: rgba(255,255,255,0.10); }
+    .nav-link:hover::after { left: 15px; right: 15px; }
+    .nav-link.active       { color: #fff !important; background: rgba(255,255,255,0.14); }
+
+    .nav-logout {
+      background: rgba(240,180,41,0.14) !important;
+      border: 1px solid rgba(240,180,41,0.32) !important;
+      color: var(--gold) !important;
+      border-radius: 50px !important;
+    }
+    .nav-logout:hover { background: var(--gold) !important; color: var(--ink) !important; }
+    .nav-logout::after { display: none; }
+
+    .navbar-toggler {
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 8px; padding: 6px 10px;
+    }
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255,255,255,0.85%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+    {% if messages %}
+
+<div class="container mt-4">
+
+    {% for message in messages %}
+
+    <div class="alert alert-success alert-dismissible fade show">
+
+        🔔 {{ message }}
+
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert">
+        </button>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+    /* ------------------------------------------
+       HERO
+    -----------------------------------------*/
+    .hero {
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse 80% 60% at 65% 40%, rgba(82,168,106,0.20) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 10% 80%, rgba(240,180,41,0.12) 0%, transparent 55%),
+        linear-gradient(155deg, #0f2817 0%, #183622 40%, #0c1e14 100%);
+      padding: 140px 0 90px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(82,168,106,0.12), transparent 65%);
+      top: -150px; right: -150px;
+      border-radius: 50%;
+      animation: float 10s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, rgba(240,180,41,0.08), transparent 65%);
+      bottom: 20px; left: -80px;
+      border-radius: 50%;
+      animation: float 14s ease-in-out infinite reverse;
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(240,180,41,0.13);
+      border: 1px solid rgba(240,180,41,0.28);
+      color: var(--gold);
+      font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 6px 16px; border-radius: 50px;
+      margin-bottom: 22px;
+    }
+    .eyebrow-dot {
+      width: 6px; height: 6px; background: var(--gold); border-radius: 50%;
+      animation: pulse-ring 2s ease-out infinite;
+    }
+
+    .hero-title {
+      font-size: clamp(2.8rem, 8vw, 6rem);
+      font-weight: 700; color: #fff;
+      line-height: 1.02; letter-spacing: -0.04em;
+      margin-bottom: 24px;
+    }
+    .hero-title .highlight {
+      background: linear-gradient(90deg, var(--gold), var(--sage-light), var(--gold));
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 4s linear infinite;
+    }
+
+    .hero-sub {
+      font-size: 1.1rem; color: rgba(255,255,255,0.60);
+      max-width: 500px; line-height: 1.75; font-weight: 300;
+      margin-bottom: 40px;
+    }
+
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .btn-hero-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: linear-gradient(135deg, var(--sage-light), var(--sage));
+      color: #fff; border: none;
+      padding: 15px 32px; border-radius: 50px;
+      font-family: 'Clash Display', sans-serif;
+      font-size: 0.98rem; font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 8px 28px rgba(82,168,106,0.42);
+      position: relative; overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .btn-hero-primary::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.18), transparent);
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    .btn-hero-primary:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 16px 40px rgba(82,168,106,0.52);
+      color: #fff;
+    }
+    .btn-hero-primary:hover::before { opacity: 1; }
+
+    .btn-hero-ghost {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.82);
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 15px 32px; border-radius: 50px;
+      font-family: 'Clash Display', sans-serif;
+      font-size: 0.98rem; font-weight: 600;
+      text-decoration: none; backdrop-filter: blur(6px);
+      transition: all 0.3s ease;
+    }
+    .btn-hero-ghost:hover {
+      background: rgba(255,255,255,0.14); color: #fff;
+      transform: translateY(-3px);
+    }
+
+    /* Floating visual */
+    .hero-visual {
+      position: relative; height: 420px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hero-orb {
+      width: 260px; height: 260px;
+      background: radial-gradient(circle at 35% 35%, rgba(82,168,106,0.38), rgba(22,50,30,0.8));
+      border-radius: 50%;
+      border: 1px solid rgba(82,168,106,0.28);
+      box-shadow: 0 0 70px rgba(82,168,106,0.18), inset 0 0 40px rgba(82,168,106,0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4.5rem;
+      animation: float 7s ease-in-out infinite;
+      position: relative; z-index: 2;
+    }
+    .hero-ring {
+      position: absolute; width: 340px; height: 340px;
+      border: 1px dashed rgba(82,168,106,0.22);
+      border-radius: 50%;
+      animation: spin-slow 30s linear infinite;
+    }
+    .hero-ring-2 {
+      position: absolute; width: 410px; height: 410px;
+      border: 1px dashed rgba(240,180,41,0.12);
+      border-radius: 50%;
+      animation: spin-slow 45s linear infinite reverse;
+    }
+    .orbit-chip {
+      position: absolute;
+      width: 54px; height: 54px;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; z-index: 3;
+    }
+    .orbit-chip:nth-child(1) { top: 18px;  right: 50px; animation: float 7s ease-in-out infinite 0s; }
+    .orbit-chip:nth-child(2) { bottom: 40px; right: 30px; animation: float 8s ease-in-out infinite 1.2s; }
+    .orbit-chip:nth-child(3) { bottom: 30px; left: 40px;  animation: float 6.5s ease-in-out infinite 2s; }
+    .orbit-chip:nth-child(4) { top: 25px;  left: 35px;   animation: float 9s ease-in-out infinite 0.6s; }
+
+    /* Stats strip */
+    .hero-stats-strip {
+      margin-top: 60px; padding-top: 40px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .strip-stat { text-align: center; padding: 0 16px; }
+    .strip-stat + .strip-stat { border-left: 1px solid rgba(255,255,255,0.07); }
+    .strip-number {
+      display: block;
+      font-family: 'Clash Display', sans-serif;
+      font-size: 2.2rem; font-weight: 700;
+      color: var(--gold); line-height: 1;
+    }
+    .strip-label {
+      display: block; font-size: 0.75rem;
+      color: rgba(255,255,255,0.40);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px;
+    }
+
+    /* ═══════════════════════════════════════
+       DIVIDER — wave
+    ═══════════════════════════════════════ */
+    .wave-divider {
+      display: block; line-height: 0;
+      background: linear-gradient(155deg, #0f2817, #0c1e14);
+    }
+    .wave-divider svg { display: block; }
+
+    /* ═══════════════════════════════════════
+       STATS SECTION
+    ═══════════════════════════════════════ */
+    .stats-section {
+      padding: 80px 0;
+      background: var(--cream);
+    }
+
+    .section-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.73rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--sage); margin-bottom: 10px;
+    }
+    .section-label::before {
+      content: ''; width: 20px; height: 2px;
+      background: var(--sage); border-radius: 2px;
+    }
+    .section-title {
+      font-size: clamp(1.7rem, 4vw, 2.6rem); font-weight: 700;
+      color: var(--ink); line-height: 1.15; letter-spacing: -0.03em;
+    }
+    .section-title span { color: var(--sage); }
+
+    /* STAT CARD */
+    .stat-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.055);
+      border-radius: var(--radius-lg);
+      padding: 36px 30px;
+      position: relative; overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 4px;
+      background: var(--card-accent, var(--sage));
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+    .stat-card:hover {
+      transform: translateY(-9px) scale(1.015);
+      box-shadow: var(--shadow-lg);
+    }
+    .card-bg-icon {
+      position: absolute; right: -8px; bottom: -12px;
+      font-size: 7rem; opacity: 0.04; line-height: 1;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.4s ease;
+    }
+    .stat-card:hover .card-bg-icon { opacity: 0.07; transform: scale(1.1) rotate(-6deg); }
+
+    .stat-icon-wrap {
+      width: 54px; height: 54px; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.45rem; margin-bottom: 20px;
+      background: var(--icon-bg, var(--sage-pale));
+      color: var(--card-accent, var(--sage));
+      box-shadow: 0 4px 14px var(--icon-shadow, rgba(61,122,79,0.18));
+      transition: transform var(--transition);
+    }
+    .stat-card:hover .stat-icon-wrap { transform: scale(1.12) rotate(-4deg); }
+
+    .stat-value {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 3rem; font-weight: 700; color: var(--ink);
+      line-height: 1; letter-spacing: -0.04em;
+      display: flex; align-items: baseline; gap: 3px;
+    }
+    .stat-suffix { font-size: 1.4rem; color: var(--card-accent, var(--sage)); }
+    .stat-label { font-size: 0.88rem; font-weight: 500; color: var(--muted); margin-top: 6px; }
+    .stat-trend {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 0.75rem; font-weight: 600;
+      color: var(--sage); background: var(--sage-pale);
+      padding: 3px 10px; border-radius: 50px; margin-top: 14px;
+    }
+    .stat-trend.down { color: #e05252; background: #fee2e2; }
+
+    .card-green  { --card-accent: #3d7a4f; --icon-bg: #e8f5ec; --icon-shadow: rgba(61,122,79,0.18); }
+    .card-amber  { --card-accent: #d97706; --icon-bg: #fef3c7; --icon-shadow: rgba(217,119,6,0.18); }
+    .card-teal   { --card-accent: #0d9488; --icon-bg: #ccfbf1; --icon-shadow: rgba(13,148,136,0.18); }
+
+    /* ═══════════════════════════════════════
+       QUICK ACTIONS
+    ═══════════════════════════════════════ */
+    .actions-section { padding: 0 0 100px; background: var(--cream); }
+
+    .action-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.055);
+      border-radius: var(--radius-md);
+      padding: 26px 22px;
+      display: flex; align-items: center; gap: 16px;
+      text-decoration: none; color: var(--ink);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden; position: relative;
+      transition: transform var(--transition), box-shadow var(--transition), border-color 0.25s ease;
+    }
+    .action-card::after {
+      content: ''; position: absolute; inset: 0;
+      background: var(--action-bg, var(--sage-pale)); opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .action-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--action-dark, var(--sage-light));
+    }
+    .action-card:hover::after { opacity: 0.06; }
+
+    .action-icon {
+      width: 50px; height: 50px; border-radius: 13px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.35rem; position: relative; z-index: 1;
+      background: var(--action-bg, var(--sage-pale));
+      color: var(--action-dark, var(--sage));
+      transition: transform var(--transition);
+    }
+    .action-card:hover .action-icon { transform: scale(1.12) rotate(-5deg); }
+
+    .action-body { position: relative; z-index: 1; flex: 1; }
+    .action-title {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 0.95rem; font-weight: 600; color: var(--ink); margin-bottom: 2px;
+    }
+    .action-desc { font-size: 0.8rem; color: var(--muted); }
+    .action-arrow {
+      margin-left: auto; color: var(--muted); font-size: 1.1rem;
+      position: relative; z-index: 1;
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+    .action-card:hover .action-arrow { transform: translateX(4px); color: var(--action-dark, var(--sage)); }
+
+    /* ═══════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════ */
+    .footer {
+      background: var(--ink); color: rgba(255,255,255,0.45);
+      padding: 44px 0; text-align: center; font-size: 0.84rem;
+    }
+    .footer a { color: var(--sage-light); text-decoration: none; }
+    .footer a:hover { color: var(--gold); }
+    .footer-brand {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 1.4rem; font-weight: 700; color: #fff; margin-bottom: 8px;
+    }
+    .footer-brand span { color: var(--gold); }
+
+    /* ═══════════════════════════════════════
+       SCROLL REVEAL
+    ═══════════════════════════════════════ */
+    .reveal {
+      opacity: 0; transform: translateY(38px);
+      transition: opacity 0.7s ease, transform 0.7s var(--transition-smooth);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.08s; }
+    .reveal-d2 { transition-delay: 0.18s; }
+    .reveal-d3 { transition-delay: 0.28s; }
+    .reveal-d4 { transition-delay: 0.38s; }
+
+    /* ═══════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════ */
+    @media (max-width: 991px) {
+      .hero { padding: 120px 0 60px; text-align: center; }
+      .hero-sub { margin: 0 auto 36px; }
+      .hero-actions { justify-content: center; }
+      .hero-visual { height: 300px; margin-top: 44px; }
+      .hero-orb { width: 200px; height: 200px; font-size: 3.5rem; }
+      .hero-ring { width: 260px; height: 260px; }
+      .hero-ring-2 { width: 320px; height: 320px; }
+    }
+    @media (max-width: 575px) {
+      .stat-card { padding: 26px 22px; }
+      .stat-value { font-size: 2.4rem; }
+      .btn-hero-primary, .btn-hero-ghost { width: 100%; justify-content: center; }
+      .strip-stat + .strip-stat { border-left: none; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 14px; margin-top: 4px; }
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(61,122,79,0.35); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--sage); }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════ NAVBAR ════ -->
+<nav class="navbar navbar-expand-lg" id="mainNav">
+  <div class="container">
+    <a class="navbar-brand" href="#">
+      <div class="brand-icon">🌿</div>
+      <span class="brand-name">Food<span>Bridge</span></span>
+    </a>
+
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navbarMain"
+            aria-controls="navbarMain" aria-expanded="false">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarMain">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-1 py-3 py-lg-0">
+        <li class="nav-item">
+          <!-- Django: {% url 'dashboard' %} -->
+          <a class="nav-link active" href="/dashboard/">
+            <i class="bi bi-grid-1x2"></i> Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/add-event/">
+            <i class="bi bi-box-seam"></i> Donate
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/events/">
+            <i class="bi bi-calendar3"></i> Events
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/accepted/">
+            <i class="bi bi-check2-circle"></i> Accepted
+          </a>
+        </li>
+        <li class="nav-item ms-lg-2">
+          <a class="nav-link nav-logout" href="/logout/">
+            <i class="bi bi-box-arrow-right"></i> Logout
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ════════════════════════════ HERO ════ -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="container position-relative">
+    <div class="row align-items-center">
+
+      <!-- Copy -->
+      <div class="col-lg-6">
+        <div class="hero-eyebrow animate-in animate-in-delay-1">
+          <span class="eyebrow-dot"></span>
+          NGO Charity Platform
+        </div>
+
+        <h1 class="hero-title animate-in animate-in-delay-2">
+          Share Food.<br>
+          <span class="highlight">Save Lives.</span>
+        </h1>
+
+        <p class="hero-sub animate-in animate-in-delay-3">
+          Connect surplus food with families in need. Every meal donated creates a ripple of kindness that transforms communities one plate at a time.
+        </p>
+
+        <div class="hero-actions animate-in animate-in-delay-4">
+          <a href="/add-event/" class="btn-hero-primary">
+            <i class="bi bi-heart-fill"></i> Donate Now
+          </a>
+          <a href="/events/" class="btn-hero-ghost">
+            <i class="bi bi-calendar3"></i> View Events
+          </a>
+        </div>
+      </div>
+
+      <!-- Visual -->
+      <div class="col-lg-6 animate-in animate-in-delay-3">
+        <div class="hero-visual">
+          <div class="orbit-chip">🥗</div>
+          <div class="orbit-chip">🍞</div>
+          <div class="orbit-chip">🥛</div>
+          <div class="orbit-chip">🍎</div>
+          <div class="hero-ring-2"></div>
+          <div class="hero-ring"></div>
+          <div class="hero-orb">🌍</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats strip -->
+    <div class="hero-stats-strip animate-in animate-in-delay-5">
+      <div class="row">
+        <div class="col-6 col-md-3">
+          <div class="strip-stat">
+            <span class="strip-number" data-count="1240">0</span>
+            <span class="strip-label">Meals Donated</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="strip-stat">
+            <span class="strip-number" data-count="320">0</span>
+            <span class="strip-label">Families Helped</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="strip-stat">
+            <span class="strip-number" data-count="48">0</span>
+            <span class="strip-label">Active Events</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="strip-stat">
+            <span class="strip-number" data-count="99">0</span>
+            <span class="strip-label">% Satisfaction</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /container -->
+</section>
+
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 70" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="70">
+    <path d="M0,40 C360,80 1080,0 1440,40 L1440,70 L0,70 Z"
+          fill="#fdfaf5"/>
+  </svg>
+</div>
+
+<!-- ════════════════════════════ STATS CARDS ════ -->
+<section class="stats-section">
+  <div class="container">
+
+    <div class="row align-items-end mb-5">
+      <div class="col-lg-6 reveal">
+        <div class="section-label"><i class="bi bi-bar-chart-line-fill"></i> Live Overview</div>
+        <h2 class="section-title">Your donation<br><span>impact at a glance</span></h2>
+      </div>
+      <div class="col-lg-6 reveal reveal-d2">
+        <p style="font-size:0.93rem; color:var(--muted); max-width:380px; line-height:1.75;">
+          Track every event, accepted donation, and completed delivery in real time — making every meal count.
+        </p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- Card 1 – Total Events -->
+      <div class="col-md-4 reveal reveal-d1">
+        <div class="stat-card card-green h-100">
+          <div class="stat-icon-wrap">
+            <i class="bi bi-calendar-event-fill"></i>
+          </div>
+          <div class="stat-value">
+            {# Django: {{ total_events }} #}
+            <span>{{ total_events }}</span>
+            <span class="stat-suffix">+</span>
+          </div>
+          <div class="stat-label">Total Events</div>
+          <div class="stat-trend">
+            <i class="bi bi-arrow-up-short"></i> 12% this month
+          </div>
+          <div class="card-bg-icon"><i class="bi bi-calendar-event-fill"></i></div>
+        </div>
+      </div>
+
+      <!-- Card 2 – Accepted -->
+      <div class="col-md-4 reveal reveal-d2">
+        <div class="stat-card card-amber h-100">
+          <div class="stat-icon-wrap">
+            <i class="bi bi-check2-all"></i>
+          </div>
+          <div class="stat-value">
+            {# Django: {{ accepted_count }} #}
+            <span>{{ accepted }}</span>
+            <span class="stat-suffix">+</span>
+          </div>
+          <div class="stat-label">Accepted Donations</div>
+          <div class="stat-trend">
+            <i class="bi bi-arrow-up-short"></i> 8% this week
+          </div>
+          <div class="card-bg-icon"><i class="bi bi-check2-all"></i></div>
+        </div>
+      </div>
+
+      <!-- Card 3 – Completed -->
+      <div class="col-md-4 reveal reveal-d3">
+        <div class="stat-card card-teal h-100">
+          <div class="stat-icon-wrap">
+            <i class="bi bi-trophy-fill"></i>
+          </div>
+          <div class="stat-value">
+            {# Django: {{ completed_count }} #}
+            <span>{{ completed }}</span>
+            <span class="stat-suffix">✓</span>
+          </div>
+          <div class="stat-label">Completed Deliveries</div>
+          <div class="stat-trend">
+            <i class="bi bi-arrow-up-short"></i> 5% this week
+          </div>
+          <div class="card-bg-icon"><i class="bi bi-trophy-fill"></i></div>
+        </div>
+      </div>
+
+    </div><!-- /row -->
+  </div>
+</section>
+
+<!-- ════════════════════════════ QUICK ACTIONS ════ -->
+<section class="actions-section">
+  <div class="container">
+
+    <div class="row mb-4">
+      <div class="col reveal">
+        <div class="section-label"><i class="bi bi-lightning-charge-fill"></i> Quick Access</div>
+        <h2 class="section-title">What would you<br><span>like to do today?</span></h2>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-sm-6 col-lg-3 reveal reveal-d1">
+        <a href="/add-event/" class="action-card"
+           style="--action-bg:#e8f5ec; --action-dark:#3d7a4f;">
+          <div class="action-icon">
+            <i class="bi bi-box-seam-fill"></i>
+          </div>
+          <div class="action-body">
+            <div class="action-title">Donate Food</div>
+            <div class="action-desc">Submit a new donation</div>
+          </div>
+          <i class="bi bi-arrow-right action-arrow"></i>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-3 reveal reveal-d2">
+        <a href="/add-event/" class="action-card"
+           style="--action-bg:#fef3c7; --action-dark:#d97706;">
+
+          <div class="action-icon" style="background:#fef3c7; color:#d97706;">
+            <i class="bi bi-calendar-plus-fill"></i>
+          </div>
+
+          <div class="action-body">
+            <div class="action-title">Create Event</div>
+            <div class="action-desc">Organise a food drive</div>
+          </div>
+
+          <i class="bi bi-arrow-right action-arrow"></i>
+
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-3 reveal reveal-d3">
+        <a href="/accepted/" class="action-card"
+           style="--action-bg:#ccfbf1; --action-dark:#0d9488;">
+          <div class="action-icon" style="background:#ccfbf1; color:#0d9488;">
+            <i class="bi bi-card-checklist"></i>
+          </div>
+          <div class="action-body">
+            <div class="action-title">View Accepted</div>
+            <div class="action-desc">Manage pending items</div>
+          </div>
+          <i class="bi bi-arrow-right action-arrow"></i>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-3 reveal reveal-d4">
+        <a href="https://chat.whatsapp.com/IJwLuFYqrxtAxhK5q3fSTd" class="action-card" target="_blank"
+           style="--action-bg:#ede9fe; --action-dark:#7c3aed;">
+          <div class="action-icon" style="background:#ede9fe; color:#7c3aed;">
+            <i class="bi bi-people-fill"></i>
+          </div>
+          <div class="action-body">
+            <div class="action-title">Volunteer Hub</div>
+            <div class="action-desc">Join a team near you</div>
+          </div>
+          <i class="bi bi-arrow-right action-arrow"></i>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════ FOOTER ════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-brand">Food<span>Bridge</span></div>
+    <p>Nourishing communities, one meal at a time.</p>
+    <p class="mt-2">
+      Built with ❤️ for a hunger-free world ·
+      <a href="/events/">Privacy Policy</a> ·
+      <a href="/events/">Contact Us</a>
+    </p>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  /* ── 1. Navbar scroll shrink ── */
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+  }, { passive: true });
+
+  /* ── 2. Count-up utility ── */
+  function countUp(el, duration = 1800) {
+    const target = parseInt(el.dataset.target || el.dataset.count, 10);
+    if (isNaN(target)) return;
+    const step = target / (duration / 16);
+    let cur = 0;
+    const timer = setInterval(() => {
+      cur += step;
+      if (cur >= target) { el.textContent = target; clearInterval(timer); }
+      else                { el.textContent = Math.floor(cur); }
+    }, 16);
+  }
+
+  /* ── 3. Intersection Observer – scroll reveal + count triggers ── */
+  let cardCountsDone = false;
+  let stripDone      = false;
+
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.13 });
+
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  /* Card count-ups */
+  const statsSection = document.querySelector('.stats-section');
+  if (statsSection) {
+    new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && !cardCountsDone) {
+        cardCountsDone = true;
+        document.querySelectorAll('.count-up').forEach(el => countUp(el));
+      }
+    }, { threshold: 0.2 }).observe(statsSection);
+  }
+
+  /* Strip count-ups */
+  const heroStrip = document.querySelector('.hero-stats-strip');
+  if (heroStrip) {
+    new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && !stripDone) {
+        stripDone = true;
+        document.querySelectorAll('.strip-number[data-count]').forEach(el => countUp(el, 2200));
+      }
+    }, { threshold: 0.3 }).observe(heroStrip);
+  }
+</script>
+<!-- =========================
+     PROFESSIONAL AI CHATBOT
+========================= -->
+
+<style>
+/* Floating Button */
+.ai-toggle{
+    position:fixed;
+    bottom:25px;
+    right:25px;
+    width:65px;
+    height:65px;
+    border-radius:50%;
+    border:none;
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+    box-shadow:0 10px 30px rgba(34,197,94,0.4);
+    z-index:9999;
+    transition:0.3s;
+}
+
+.ai-toggle:hover{
+    transform:scale(1.08);
+}
+
+/* Chat Container */
+.ai-chatbox{
+    position:fixed;
+    bottom:100px;
+    right:25px;
+    width:370px;
+    height:580px;
+    background:rgba(15,23,42,0.95);
+    backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:28px;
+    overflow:hidden;
+    display:none;
+    flex-direction:column;
+    z-index:9999;
+    box-shadow:0 20px 60px rgba(0,0,0,0.45);
+    animation:chatOpen 0.35s ease;
+}
+
+@keyframes chatOpen{
+    from{
+        opacity:0;
+        transform:translateY(20px) scale(0.95);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+}
+
+/* Header */
+.ai-header{
+    padding:18px 20px;
+    background:linear-gradient(135deg,#22c55e,#15803d);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.ai-header-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.ai-avatar{
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.2);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+}
+
+.ai-title{
+    font-size:18px;
+    font-weight:700;
+    margin:0;
+}
+
+.ai-status{
+    font-size:12px;
+    opacity:0.9;
+}
+
+.ai-close{
+    background:none;
+    border:none;
+    color:white;
+    font-size:24px;
+    cursor:pointer;
+}
+
+/* Chat Body */
+.ai-body{
+    flex:1;
+    padding:20px;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    background:#0f172a;
+}
+
+/* Messages */
+.message{
+    max-width:82%;
+    padding:14px 16px;
+    border-radius:18px;
+    font-size:14px;
+    line-height:1.6;
+    animation:fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.user-message{
+    align-self:flex-end;
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+    color:white;
+    border-bottom-right-radius:6px;
+}
+
+.bot-message{
+    align-self:flex-start;
+    background:#1e293b;
+    color:#e2e8f0;
+    border-bottom-left-radius:6px;
+}
+
+/* Input Area */
+.ai-footer{
+    padding:18px;
+    background:#111827;
+    border-top:1px solid rgba(255,255,255,0.06);
+}
+
+.ai-input-box{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.ai-input{
+    flex:1;
+    border:none;
+    outline:none;
+    background:#1e293b;
+    color:white;
+    padding:14px 16px;
+    border-radius:14px;
+    font-size:14px;
+}
+
+.ai-input::placeholder{
+    color:#94a3b8;
+}
+
+.ai-send{
+    width:50px;
+    height:50px;
+    border:none;
+    border-radius:14px;
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+    color:white;
+    font-size:20px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.ai-send:hover{
+    transform:scale(1.05);
+}
+
+/* Scrollbar */
+.ai-body::-webkit-scrollbar{
+    width:5px;
+}
+
+.ai-body::-webkit-scrollbar-thumb{
+    background:#334155;
+    border-radius:10px;
+}
+
+/* Mobile */
+@media(max-width:500px){
+
+    .ai-chatbox{
+        width:95%;
+        right:2.5%;
+        bottom:90px;
+        height:80vh;
+    }
+
+}
+</style>
+
+<!-- Floating Button -->
+<button class="ai-toggle" onclick="toggleChat()">
+💬
+</button>
+
+<!-- Chatbot -->
+<div class="ai-chatbox" id="aiChatbox">
+
+    <!-- Header -->
+    <div class="ai-header">
+
+        <div class="ai-header-left">
+            <div class="ai-avatar">🤖</div>
+
+            <div>
+                <h4 class="ai-title">Food AI Assistant</h4>
+                <div class="ai-status">Online • Smart Support</div>
+            </div>
+        </div>
+
+        <button class="ai-close" onclick="toggleChat()">×</button>
+
+    </div>
+
+    <!-- Messages -->
+    <div class="ai-body" id="chatBody">
+
+        <div class="message bot-message">
+            👋 Hello! I'm your AI assistant.<br><br>
+            Ask me about:
+            <br>• Food donation
+            <br>• NGOs
+            <br>• Events
+            <br>• Hunger support
+            <br>• Your platform
+        </div>
+
+    </div>
+
+    <!-- Input -->
+    <div class="ai-footer">
+
+        <div class="ai-input-box">
+
+            <input
+                type="text"
+                id="userInput"
+                class="ai-input"
+                placeholder="Type your message..."
+                onkeypress="handleKey(event)"
+            >
+
+            <button class="ai-send" onclick="sendMessage()">
+                ➤
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+/* Open Close Chat */
+function toggleChat(){
+
+    let box = document.getElementById("aiChatbox");
+
+    if(box.style.display === "flex"){
+        box.style.display = "none";
+    }
+    else{
+        box.style.display = "flex";
+    }
+}
+
+/* Enter Key */
+function handleKey(event){
+    if(event.key === "Enter"){
+        sendMessage();
+    }
+}
+
+/* Send Message */
+async function sendMessage(){
+
+    let input = document.getElementById("userInput");
+    let message = input.value.trim();
+
+    if(message === "") return;
+
+    let chatBody = document.getElementById("chatBody");
+
+    /* User Message */
+    chatBody.innerHTML += `
+        <div class="message user-message">
+            ${message}
+        </div>
+    `;
+
+    input.value = "";
+
+    /* Auto Scroll */
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+    /* Typing */
+    let typingId = "typing-" + Date.now();
+
+    chatBody.innerHTML += `
+        <div class="message bot-message" id="${typingId}">
+            ⏳ Thinking...
+        </div>
+    `;
+
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+    try{
+
+        const response = await fetch("/ai-chat/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: message
+            })
+        });
+
+        const data = await response.json();
+
+        document.getElementById(typingId).remove();
+
+        chatBody.innerHTML += `
+            <div class="message bot-message">
+                ${data.response}
+            </div>
+        `;
+
+        chatBody.scrollTop = chatBody.scrollHeight;
+
+    }
+    catch(error){
+
+        document.getElementById(typingId).remove();
+
+        chatBody.innerHTML += `
+            <div class="message bot-message">
+                ❌ Error connecting AI server.
+            </div>
+        `;
+    }
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,528 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NGO Dashboard | FoodBridge</title>
+
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+rel="stylesheet"
+/>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet"
+/>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:'Poppins',sans-serif;
+
+    background:
+    linear-gradient(rgba(0,0,0,0.76),rgba(0,0,0,0.84)),
+    url('https://images.unsplash.com/photo-1488459716781-31db52582fe9');
+
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+
+    min-height:100vh;
+
+    color:white;
+
+    overflow-x:hidden;
+}
+
+/* MAIN CONTAINER */
+
+.dashboard-container{
+
+    max-width:1450px;
+
+    margin:auto;
+
+    padding:40px 25px;
+}
+
+/* HERO CARD */
+
+.hero-card{
+
+    background:rgba(255,255,255,0.06);
+
+    backdrop-filter:blur(20px);
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    border-radius:30px;
+
+    padding:45px;
+
+    box-shadow:0 20px 50px rgba(0,0,0,0.28);
+
+    margin-bottom:35px;
+}
+
+.hero-title{
+
+    font-size:58px;
+
+    font-weight:800;
+
+    margin-bottom:12px;
+}
+
+.hero-title span{
+
+    color:#22c55e;
+}
+
+.hero-subtitle{
+
+    color:#d1d5db;
+
+    font-size:18px;
+}
+
+/* STATS */
+
+.stats-card{
+
+    background:linear-gradient(
+    135deg,
+    rgba(9,25,18,0.82),
+    rgba(16,40,28,0.74)
+    );
+
+    border-radius:28px;
+
+    padding:35px;
+
+    text-align:center;
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,0.05);
+
+    transition:0.35s ease;
+
+    box-shadow:0 15px 35px rgba(0,0,0,0.25);
+
+    height:100%;
+}
+
+.stats-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:
+    0 20px 45px rgba(34,197,94,0.18),
+    0 0 20px rgba(34,197,94,0.10);
+}
+
+.stats-number{
+
+    font-size:58px;
+
+    font-weight:800;
+
+    color:#4ade80;
+}
+
+.stats-label{
+
+    margin-top:10px;
+
+    color:#d1d5db;
+
+    font-size:18px;
+
+    font-weight:500;
+}
+
+/* ACTION CARD */
+
+.action-card{
+
+    margin-top:40px;
+
+    background:rgba(255,255,255,0.06);
+
+    backdrop-filter:blur(18px);
+
+    border-radius:30px;
+
+    padding:35px;
+
+    border:1px solid rgba(255,255,255,0.06);
+
+    box-shadow:0 20px 45px rgba(0,0,0,0.25);
+}
+
+.section-title{
+
+    font-size:32px;
+
+    font-weight:700;
+
+    margin-bottom:28px;
+}
+
+/* BUTTONS */
+
+.action-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:12px;
+
+    padding:20px;
+
+    border-radius:22px;
+
+    text-decoration:none;
+
+    color:white;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    transition:0.35s ease;
+
+    min-height:70px;
+}
+
+.action-btn:hover{
+
+    transform:translateY(-4px) scale(1.02);
+
+    color:white;
+}
+
+/* BUTTON COLORS */
+
+.btn-blue{
+
+    background:linear-gradient(135deg,#0ea5e9,#2563eb);
+}
+
+.btn-green{
+
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+}
+
+.btn-orange{
+
+    background:linear-gradient(135deg,#f59e0b,#ea580c);
+}
+
+.btn-red{
+
+    background:linear-gradient(135deg,#ef4444,#dc2626);
+}
+
+/* GLOW */
+
+.btn-blue:hover{
+
+    box-shadow:0 15px 35px rgba(37,99,235,0.35);
+}
+
+.btn-green:hover{
+
+    box-shadow:0 15px 35px rgba(34,197,94,0.35);
+}
+
+.btn-orange:hover{
+
+    box-shadow:0 15px 35px rgba(249,115,22,0.35);
+}
+
+.btn-red:hover{
+
+    box-shadow:0 15px 35px rgba(239,68,68,0.35);
+}
+
+/* FLOAT */
+
+.stats-card{
+
+    animation:floatCard 4s ease-in-out infinite;
+}
+
+@keyframes floatCard{
+
+    0%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-5px);
+    }
+
+    100%{
+        transform:translateY(0px);
+    }
+}
+
+/* DONATION CARD */
+
+.donation-card{
+
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    overflow:hidden;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+    .hero-title{
+        font-size:40px;
+    }
+
+    .stats-number{
+        font-size:42px;
+    }
+
+    .section-title{
+        font-size:26px;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- HERO -->
+
+    <div class="hero-card">
+
+        <h1 class="hero-title">
+            🌿 NGO <span>Dashboard</span>
+        </h1>
+
+        <p class="hero-subtitle">
+
+            Welcome back <b>{{ request.user.username }}</b>.
+            Manage donations, track accepted food and help communities efficiently.
+
+        </p>
+
+    </div>
+
+    <!-- STATS -->
+
+    <div class="row g-4">
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="stats-card">
+
+                <div class="stats-number">
+                    {{ total }}
+                </div>
+
+                <div class="stats-label">
+                    Total Donations
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="stats-card">
+
+                <div class="stats-number">
+                    {{ accepted }}
+                </div>
+
+                <div class="stats-label">
+                    Accepted
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="stats-card">
+
+                <div class="stats-number">
+                    {{ completed }}
+                </div>
+
+                <div class="stats-label">
+                    Completed
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="stats-card">
+
+                <div class="stats-number">
+                    {{ urgent }}
+                </div>
+
+                <div class="stats-label">
+                    🔥 Urgent
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- QUICK ACTIONS -->
+
+    <div class="action-card">
+
+        <h2 class="section-title">
+            Quick Actions
+        </h2>
+
+        <div class="row g-4">
+
+            <div class="col-lg-3 col-md-6">
+
+                <a href="/events/" class="action-btn btn-blue">
+
+                    📦 View Donations
+
+                </a>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+
+                <a href="/accepted/" class="action-btn btn-green">
+
+                    ✅ Accepted Donations
+
+                </a>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+
+                <a href="/dashboard/" class="action-btn btn-orange">
+
+                    📊 Main Dashboard
+
+                </a>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+
+                <a href="/logout/" class="action-btn btn-red">
+
+                    🚪 Logout
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- NEARBY DONATIONS -->
+
+    <div class="action-card mt-4">
+
+        <h2 class="section-title">
+            📍 Nearby Donations
+        </h2>
+
+        <div class="row g-4">
+
+            {% for item in donations %}
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="stats-card donation-card">
+
+                    <div>
+
+                        <h4 style="font-weight:700; margin-bottom:20px;">
+
+                            {{ item.event.event_name }}
+
+                        </h4>
+
+                        <p style="color:#d1d5db; line-height:1.8;">
+
+                            🍲 {{ item.event.food_items }}
+
+                            <br><br>
+
+                            📍 {{ item.event.location }}
+
+                            <br><br>
+
+                            📏 {{ item.distance }} KM away
+
+                        </p>
+
+                    </div>
+
+                    <a href="/accepted/"
+                    class="action-btn btn-green mt-4">
+
+                        View Donation
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
