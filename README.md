@@ -21,7 +21,7 @@ A full-stack **Django** web application that connects food donors with NGOs, hel
 |------------|-------|
 | Python | Backend |
 | Django | Web Framework |
-| SQLite | Database |
+| MYSQL | Database |
 | HTML/CSS | Frontend |
 | Bootstrap | UI |
 | JavaScript | Client-side |
